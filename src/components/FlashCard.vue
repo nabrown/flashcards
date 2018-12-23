@@ -3,7 +3,11 @@
   <div class="flip-container" :class="{flipped: flipped}" @click="flip">
    <div class="flipper" ref="flashcard" id="flashcard">
     <div class="front">
-      <span id="flashcard--content_q">{{ question }}</span>
+      <transition name="fade-in-out" mode="out-in">
+        <span id="flashcard--content_q" :key="question">
+            {{ question }}
+        </span>
+      </transition>
     </div>
     <div class="back">
       <span id="flashcard--content_a">{{ answer }}</span>
@@ -52,5 +56,11 @@
 </script>
 
 <style scoped>
-
+.fade-in-out-enter-active,
+.fade-in-out-leave-active{
+  transition: opacity .6s ease;
+}
+.fade-in-out-enter, .fade-in-out-leave-to{
+  opacity: 0;
+}
 </style>

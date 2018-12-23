@@ -4,7 +4,9 @@
     <new-question 
       :class="{'open': addQuestionOpen}" 
       @addSuccess="addQuestionOpen = false" 
-      @addCancel="addQuestionOpen = false"></new-question>
+      @addCancel="addQuestionOpen = false"
+      :categories="categories"
+    ></new-question>
   </div>
 </template>
 
@@ -63,7 +65,7 @@ export default {
     this.$axios
       .get('https://sheets.googleapis.com/v4/spreadsheets/1ve72QEH0xQUZ6pA-NRnXxIjcGHBB11TSRjp_ajyYGD0/values/E1:E20?key=AIzaSyAH7rwwBBAjei-sitU8GpXXmEw-kuNXBWY')
       .then(response => {
-        this.categories = response.data.values
+        this.categories = response.data.values.map(x => x[0])
       })
   },
   created(){
@@ -76,16 +78,16 @@ export default {
         this.addQuestionOpen = false
       }
     })
-    // on mobile use long touch
+    // on mobile use long two-fingered touch
     let touchStartTime = 0,
         touchEndTime = 0,
         touchThresholdTime = 300
     window.addEventListener('touchstart', () => {
       touchStartTime = new Date().getTime()
     })
-    window.addEventListener('touchend', () => {
+    window.addEventListener('touchend', (e) => {
       touchEndTime = new Date().getTime()
-      if (touchEndTime - touchStartTime > touchThresholdTime){
+      if (touchEndTime - touchStartTime > touchThresholdTime && e.touches.length > 1){
         this.addQuestionOpen = true
       }
     })
@@ -155,7 +157,7 @@ export default {
   .radio label{
     order: 2;
   }
-  input[type="text"]{
+  input[type="text"], select{
     font-family: inherit;
     min-width: 20em;
     padding: .4em .5em;
@@ -164,10 +166,12 @@ export default {
     font-size: .5em;
     box-shadow: inset 1px 1px 1px rgba(0,0,0,.1);
   }
+  input[type="radio"]{
+    transform: scale(1.5);
+  }
   @media only screen and (max-width: 768px) {
-    input[type="text"]{
+    input[type="text"], select{
       min-width: 18em;
-      border: 1px solid red;
     }
   }
   button[type="submit"]{
@@ -184,15 +188,17 @@ export default {
   }
   .close{
     position: absolute;
-    top: -1.5em;
-    right: -.5em;
+    top: -20px;
+    right: -8px;
+    width: 1.8em;
+    height: 1.8em;
     z-index: 99;
     font-family: inherit;
     border-radius: 50%;
-    width: 5em;
-    height: 5em;
     color: var(--background);
     background-color: var(--text);
+    font-size: 1em;
+    line-height: 1em;
   }
   
   /* https://davidwalsh.name/demo/css-flip.php */

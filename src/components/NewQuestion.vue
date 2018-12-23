@@ -1,7 +1,7 @@
 <template>
     <div class="modal-backdrop">
       <div class="modal-dialog">
-        <button class="close" @click="close">close</button>
+        <button class="close" @click="close">X</button>
         <form @submit.prevent="validateAndSubmit">
           <ul class="errors" v-if="errors.length">
             <li v-for="(error, index) in errors" v-bind:key="index">{{ error }}</li>
@@ -13,7 +13,10 @@
             <input name="answer" type="text" v-model="answer" />
           </label>
           <label  class="label" for="category"><span>category</span>
-            <input name="category" type="text" v-model="category" />
+            <select name="category" id="category" v-model="category">
+              <option v-for="(category, index) in categories" :value="category" :key="index">{{ category }}</option>
+            </select>
+            <!-- <input name="category" type="text" v-model="category" /> -->
           </label>
           <span class="label"><span>difficulty</span>
             <div class="radio-group">
@@ -40,6 +43,12 @@
 
 <script>
   export default {
+    props: {
+      categories: {
+        required: false,
+        type: Array
+      }
+    },
     data: function(){
       return {
         question: '',
