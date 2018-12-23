@@ -1,7 +1,10 @@
 <template>
   <div id="app">
     <flash-card :question="question" :answer="answer" @refresh="refresh"></flash-card>
-    <new-question :class="{'open': addQuestionOpen}" @addSuccess="addQuestionOpen = false"></new-question>
+    <new-question 
+      :class="{'open': addQuestionOpen}" 
+      @addSuccess="addQuestionOpen = false" 
+      @addCancel="addQuestionOpen = false"></new-question>
   </div>
 </template>
 
@@ -123,11 +126,12 @@ export default {
     display: flex;
   }
   .modal-dialog{
+    position: relative;
     background: var(--background-light);
     border-radius: 1em;
   } 
   form{
-    margin: 1em;
+    margin: .8em;
     display: flex;
     flex-direction: column;
     justify-content: space-around;
@@ -160,6 +164,12 @@ export default {
     font-size: .5em;
     box-shadow: inset 1px 1px 1px rgba(0,0,0,.1);
   }
+  @media only screen and (max-width: 768px) {
+    input[type="text"]{
+      min-width: 18em;
+      border: 1px solid red;
+    }
+  }
   button[type="submit"]{
     margin-top: .5em;
     font-family: inherit;
@@ -171,8 +181,20 @@ export default {
   .errors{
     color: var(--error);
     font-size: .5em;
-
   }
+  .close{
+    position: absolute;
+    top: -1.5em;
+    right: -.5em;
+    z-index: 99;
+    font-family: inherit;
+    border-radius: 50%;
+    width: 5em;
+    height: 5em;
+    color: var(--background);
+    background-color: var(--text);
+  }
+  
   /* https://davidwalsh.name/demo/css-flip.php */
   /* entire container, keeps perspective */
   .flip-container {
@@ -205,7 +227,7 @@ export default {
     }
     @media only screen and (max-width: 768px) {
       .flip-container{
-        margin: 6vh auto 14vh auto;
+        margin: 6vh auto auto auto;
       }
       .flip-container, .front, .back {
         width: 80vw;
@@ -224,13 +246,7 @@ export default {
   /* flip speed goes here */
   .flipper {
       position: relative;
-      -webkit-transition: 700ms;
-      -webkit-transform-style: preserve-3d;
-      -ms-transition: 700ms;
-      -moz-transition: 700ms;
       -moz-transform: perspective(1000px);
-      -moz-transform-style: preserve-3d;
-      -ms-transform-style: preserve-3d;
       transition: 700ms;
       transform-style: preserve-3d;
   }
@@ -240,23 +256,7 @@ export default {
       position: absolute;
       top: 0;
       left: 0;
-      -webkit-backface-visibility: hidden;
-      -moz-backface-visibility: hidden;
-      -ms-backface-visibility: hidden;
       backface-visibility: hidden;
-    
-      -webkit-transition: 600ms;
-      -webkit-transform-style: preserve-3d;
-      -webkit-transform: rotateY(0deg);
-      -moz-transition: 700ms;
-      -moz-transform-style: preserve-3d;
-      -moz-transform: rotateY(0deg);
-      -o-transition: 700ms;
-      -o-transform-style: preserve-3d;
-      -o-transform: rotateY(0deg);
-      -ms-transition: 700ms;
-      -ms-transform-style: preserve-3d;
-      -ms-transform: rotateY(0deg);
       transition: 700ms;
       transform-style: preserve-3d;
       transform: rotateY(0deg);
@@ -273,31 +273,26 @@ export default {
 
   /* back, initially hidden pane */
   .back {
-    -webkit-transform: rotateY(-180deg);
-    -moz-transform: rotateY(-180deg);
-    -o-transform: rotateY(-180deg);
-    -ms-transform: rotateY(-180deg);
     transform: rotateY(-180deg);
     background-color: var(--back);
   }
+
   .refresh{
     display: block;
-    margin: -1.5em auto 0 auto;
-    width: 50vw;
-    max-width: 8em;
-    height: 1.5em;
+    position: fixed;
+    width: 6em;
+    height: 1.8em;
     border: 0;
     border-radius: .5em .5em 0 0;
     color: var(--background);
     background-color: var(--text);
-    font-size: inherit;
+    font-size: .5em;
     font-family: inherit;
     cursor: pointer;
     outline: none;
-    }
-    .post{
-      position: absolute;
-      top: 0;
-      left: 0;
-    }
+    right: 0;
+    bottom: 15em;
+    transform: rotate(-90deg);
+    transform-origin: 100% 100%;
+  }
 </style>

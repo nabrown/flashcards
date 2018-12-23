@@ -1,6 +1,7 @@
 <template>
     <div class="modal-backdrop">
       <div class="modal-dialog">
+        <button class="close" @click="close">close</button>
         <form @submit.prevent="validateAndSubmit">
           <ul class="errors" v-if="errors.length">
             <li v-for="(error, index) in errors" v-bind:key="index">{{ error }}</li>
@@ -62,7 +63,7 @@
           }
         }
       },
-      addNew: function(){
+      addNew() {
         this.$axios
           .post('https://hooks.zapier.com/hooks/catch/3852402/03flcx/',{
             question: this.question,
@@ -88,6 +89,9 @@
           .catch(function (error) {
             alert('Darn, the following went wrong: ' + error)
           });
+      },
+      close() {
+        this.$emit('addCancel')
       }
     }
   }
