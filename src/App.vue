@@ -26,6 +26,8 @@ export default {
   },
   data: function(){
     return {
+      outOfPairsQuestion: "What do you need now?",
+      outOfPairsAnswer: "More trivia!",
       question: "What type of pet is an Abyssinian?",
       answer: "A cat.",
       pairs: [],
@@ -44,8 +46,8 @@ export default {
   methods: {
     refresh: function(){
       if(this.numPairs === 0){
-        this.question = "What do you need now?"
-        this.answer = "More trivia questions!"
+        this.question = this.outOfPairsQuestion
+        this.answer = this.outOfPairsAnswer
       }else{
         let newPair = this.pairs[this.randomNum]
         this.pairs.splice(this.randomNum, 1)
@@ -114,6 +116,7 @@ export default {
     background: var(--background);
     font-family: 'Arvo';
     font-size: 2em;
+    font-size: calc(28px + 4 * ((100vw - 320px) / 1200));
     color: var(--text);
   }
   .modal-backdrop{
@@ -174,13 +177,17 @@ export default {
       min-width: 18em;
     }
   }
-  button[type="submit"]{
-    margin-top: .5em;
-    font-family: inherit;
+  .button{
     font-size: inherit;
     border-radius: .5em;
     color: var(--background);
     background-color: var(--text);
+    cursor: pointer;
+    outline: none;
+  }
+  button[type="submit"]{
+    margin-top: .5em;
+    font-family: inherit;
   }
   .errors{
     color: var(--error);
@@ -193,10 +200,7 @@ export default {
     width: 1.8em;
     height: 1.8em;
     z-index: 99;
-    font-family: inherit;
     border-radius: 50%;
-    color: var(--background);
-    background-color: var(--text);
     font-size: 1em;
     line-height: 1em;
   }
@@ -206,9 +210,6 @@ export default {
   .flip-container {
     margin: 20vh auto;
     
-    -webkit-perspective: 1000;
-    -moz-perspective: 1000;
-    -ms-perspective: 1000;
     perspective: 1000;
     
     -ms-transform: perspective(1000px);
@@ -220,9 +221,6 @@ export default {
 
   /* flip the pane  */
   .flip-container.flipped .flipper{
-    -webkit-transform: rotateY(180deg);
-    -moz-transform: rotateY(180deg);
-    -o-transform: rotateY(180deg);
     transform: rotateY(180deg);
     }
 
@@ -290,12 +288,7 @@ export default {
     height: 1.8em;
     border: 0;
     border-radius: .5em .5em 0 0;
-    color: var(--background);
-    background-color: var(--text);
     font-size: .5em;
-    font-family: inherit;
-    cursor: pointer;
-    outline: none;
     right: 0;
     bottom: 15em;
     transform: rotate(-90deg);

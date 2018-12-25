@@ -1,7 +1,7 @@
 <template>
     <div class="modal-backdrop">
       <div class="modal-dialog">
-        <button class="close" @click="close">X</button>
+        <button class="button close" @click="close">X</button>
         <form @submit.prevent="validateAndSubmit">
           <ul class="errors" v-if="errors.length">
             <li v-for="(error, index) in errors" v-bind:key="index">{{ error }}</li>
@@ -35,7 +35,7 @@
             </div>
     
           </span>
-          <button type="submit">Add it!</button>
+          <button class="button" type="submit">Add it!</button>
         </form>
       </div>
     </div>

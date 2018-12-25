@@ -14,7 +14,7 @@
     </div>
     </div>
   </div>
-  <button class="refresh" @click.stop.prevent="refresh">Next</button>
+  <button class="button refresh" @click.stop.prevent="refresh">Next</button>
 </div>
 </template>
 
