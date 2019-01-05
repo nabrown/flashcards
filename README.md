@@ -1,4 +1,6 @@
-# trivia
+# Flash Cards
+
+This is a little web app built with Vue.js to display flash cards. Currently, it pulls trivia from a Google Sheet. The plan is to make it generic and able to take any pairs of 'prompt' and 'response' to show as flash cards. 
 
 ## Project setup
 ```
