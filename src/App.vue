@@ -1,18 +1,18 @@
 <template>
   <div id="app">
-    <flash-card :question="question" :answer="answer" @refresh="refresh"></flash-card>
-    <new-question 
-      :class="{'open': addQuestionOpen}" 
-      @addSuccess="addQuestionOpen = false" 
-      @addCancel="addQuestionOpen = false"
+    <flash-card :prompt="prompt" :response="response" @refresh="refresh"></flash-card>
+    <new-card-form 
+      :class="{'open': addCardOpen}" 
+      @addSuccess="addCardOpen = false" 
+      @addCancel="addCardOpen = false"
       :categories="categories"
-    ></new-question>
+    ></new-card-form>
   </div>
 </template>
 
 <script>
 import FlashCard from './components/FlashCard.vue'
-import NewQuestion from './components/NewQuestion.vue'
+import NewCardForm from './components/NewCardForm.vue'
 
 function getRandomInt(min, max) {
   return Math.floor(Math.random() * (max - min)) + min;
@@ -22,41 +22,42 @@ export default {
   name: 'app',
   components: {
     FlashCard,
-    NewQuestion
+    NewCardForm
   },
   data: function(){
     return {
-      outOfPairsQuestion: "What do you need now?",
-      outOfPairsAnswer: "More trivia!",
-      question: "What type of pet is an Abyssinian?",
-      answer: "A cat.",
-      pairs: [],
+      outOfCardsPrompt: "What do you need now?",
+      outOfCardsResponse: "More trivia!",
+      prompt: "What type of pet is an Abyssinian?",
+      response: "A cat.",
+      cards: [],
       categories: [],
-      addQuestionOpen: false
+      addCardOpen: false
     }
   },
   computed:{
     numPairs: function(){
-      return this.pairs.length
+      return this.cards.length
     },
     randomNum: function(){
-      return getRandomInt(0, this.numPairs)
+      return getRandomInt(0, this.numCards)
     }
   },
   methods: {
     refresh: function(){
-      if(this.numPairs === 0){
-        this.question = this.outOfPairsQuestion
-        this.answer = this.outOfPairsAnswer
+      if(this.numCards === 0){
+        this.prompt = this.outOfCardsPrompt
+        this.response = this.outOfCardsResponse
       }else{
-        let newPair = this.pairs[this.randomNum]
-        this.pairs.splice(this.randomNum, 1)
-        this.question = newPair[0]
-        this.answer = newPair[1]
+        let newCard = this.cards[this.randomNum]
+        this.cards.splice(this.randomNum, 1)
+        this.prompt = newCard[0]
+        this.response = newCard[1]
       }
     }
   },
   mounted() {
+    //https://zapier.com/help/common-problems-webhooks/
     this.$axios.defaults.headers.common['Content-Type'] = 'application/x-www-form-urlencoded';
     this.$axios
       .get('https://sheets.googleapis.com/v4/spreadsheets/1ve72QEH0xQUZ6pA-NRnXxIjcGHBB11TSRjp_ajyYGD0/values/A1:D500?key=AIzaSyAH7rwwBBAjei-sitU8GpXXmEw-kuNXBWY')
@@ -71,13 +72,13 @@ export default {
       })
   },
   created(){
-    // on dektop hit Enter to bring up New Question dialog
+    // on dektop hit Enter to bring up New Card Form dialog
     window.addEventListener('keyup', (e) => {
       if(e.key == "Enter"){
-        this.addQuestionOpen = true
+        this.addCardOpen = true
       }
       if(e.key == "Escape"){
-        this.addQuestionOpen = false
+        this.addCardOpen = false
       }
     })
     // on mobile use long two-fingered touch
@@ -90,7 +91,7 @@ export default {
     window.addEventListener('touchend', (e) => {
       touchEndTime = new Date().getTime()
       if (touchEndTime - touchStartTime > touchThresholdTime && e.touches.length > 1){
-        this.addQuestionOpen = true
+        this.addCardOpen = true
       }
     })
   }
