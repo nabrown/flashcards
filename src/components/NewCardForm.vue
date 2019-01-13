@@ -6,11 +6,11 @@
           <ul class="errors" v-if="errors.length">
             <li v-for="(error, index) in errors" v-bind:key="index">{{ error }}</li>
           </ul>
-          <label  class="label" for="question"><span>question</span>
-            <input name="question" type="text" v-model="question" />
+          <label  class="label" for="prompt"><span>prompt</span>
+            <input name="prompt" type="text" v-model="prompt" />
           </label>
-          <label  class="label" for="answer"><span>answer</span>
-            <input name="answer" type="text" v-model="answer" />
+          <label  class="label" for="response"><span>response</span>
+            <input name="response" type="text" v-model="response" />
           </label>
           <label  class="label" for="category"><span>category</span>
             <select name="category" id="category" v-model="category">
@@ -51,8 +51,8 @@
     },
     data: function(){
       return {
-        question: '',
-        answer: '',
+        prompt: '',
+        response: '',
         category: '',
         difficulty: null,
         errors: []
@@ -61,22 +61,22 @@
     methods: {
       validateAndSubmit(){
         this.errors = []
-        if(this.question.length >= 15 && this.answer !== ""){
+        if(this.prompt.length >= 15 && this.response !== ""){
           this.addNew()
         }else{
-          if(this.question.length < 15){
-            this.errors.push("Please provide a question.")
+          if(this.prompt.length < 15){
+            this.errors.push("Please provide a prompt.")
           }
-          if(this.answer === ""){
-            this.errors.push("Please provide an answer.")
+          if(this.response === ""){
+            this.errors.push("Please provide an response.")
           }
         }
       },
       addNew() {
         this.$axios
           .post('https://hooks.zapier.com/hooks/catch/3852402/03flcx/',{
-            question: this.question,
-            answer: this.answer,
+            prompt: this.prompt,
+            response: this.response,
             category: this.category,
             difficulty: this.difficulty
           },{
@@ -86,11 +86,11 @@
           })
           // TODO add feedback success or failure
           // TODO add option to add another or continue with game
-          // TODO add question to extant `pairs` array
+          // TODO add prompt to extant `pairs` array
           // TODO add category to extant `categories` array
           .then(() => {
-            this.question = ''
-            this.answer = ''
+            this.prompt = ''
+            this.response = ''
             this.category = ''
             this.difficulty = null
             this.$emit('addSuccess')
