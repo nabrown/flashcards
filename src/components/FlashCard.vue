@@ -43,7 +43,7 @@
       flip() {
         return new Promise((resolve) => {
           const el = this.$refs.flashcard
-          const onAnimationComplete = e => {
+          const onAnimationComplete = () => {
             el.removeEventListener('transitionend', onAnimationComplete)
             resolve();
           }

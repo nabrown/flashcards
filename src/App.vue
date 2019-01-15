@@ -32,6 +32,7 @@
 import FlashCard from "./components/FlashCard.vue";
 // import FlashCardRenderless from "./components/FlashCardRenderless.vue";
 import NewCardForm from "./components/NewCardForm.vue";
+import {CONFIG} from "./app-config.js";
 
 function getRandomInt(min, max) {
   return Math.floor(Math.random() * (max - min)) + min;
@@ -82,7 +83,7 @@ export default {
       "application/x-www-form-urlencoded";
     this.$axios
       .get(
-        "https://sheets.googleapis.com/v4/spreadsheets/1ve72QEH0xQUZ6pA-NRnXxIjcGHBB11TSRjp_ajyYGD0/values/A1:D500?key=AIzaSyAH7rwwBBAjei-sitU8GpXXmEw-kuNXBWY"
+        "https://sheets.googleapis.com/v4/spreadsheets/1ve72QEH0xQUZ6pA-NRnXxIjcGHBB11TSRjp_ajyYGD0/values/A1:D500?key=" + CONFIG.GoogleAPIKey
       )
       .then(response => {
         this.cards = response.data.values;
@@ -90,7 +91,7 @@ export default {
       });
     this.$axios
       .get(
-        "https://sheets.googleapis.com/v4/spreadsheets/1ve72QEH0xQUZ6pA-NRnXxIjcGHBB11TSRjp_ajyYGD0/values/E1:E20?key=AIzaSyAH7rwwBBAjei-sitU8GpXXmEw-kuNXBWY"
+        "https://sheets.googleapis.com/v4/spreadsheets/1ve72QEH0xQUZ6pA-NRnXxIjcGHBB11TSRjp_ajyYGD0/values/E1:E20?key=" + CONFIG.GoogleAPIKey
       )
       .then(response => {
         this.categories = response.data.values.map(x => x[0]);
