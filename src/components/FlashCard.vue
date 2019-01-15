@@ -4,28 +4,28 @@
    <div class="flipper" ref="flashcard" id="flashcard">
     <div class="front">
       <transition name="fade-in-out" mode="out-in">
-        <span id="flashcard--content_q" :key="question">
-            {{ question }}
+        <span id="flashcard--content_q" :key="prompt">
+            {{ prompt }}
         </span>
       </transition>
     </div>
     <div class="back">
-      <span id="flashcard--content_a">{{ answer }}</span>
+      <span id="flashcard--content_a">{{ response }}</span>
     </div>
     </div>
   </div>
-  <button class="button refresh" @click.stop.prevent="refresh">Next</button>
+  <button class="button refresh" @click="requestNewCard">Next</button>
 </div>
 </template>
 
 <script>
   export default {
     props: {
-      question: {
+      prompt: {
         required: true,
         type: String
       },
-      answer: {
+      response: {
         required: true
       }
     },
@@ -41,15 +41,24 @@
     },
     methods: {
       flip() {
-        this.flipped = !this.flipped
+        return new Promise((resolve) => {
+          const el = this.$refs.flashcard
+          const onAnimationComplete = e => {
+            el.removeEventListener('transitionend', onAnimationComplete)
+            resolve();
+          }
+          el.addEventListener('transitionend', onAnimationComplete, false)
+          this.flipped = !this.flipped
+        })
       },
-      refresh() {
-        this.flipped = false
-        // this could be done with events and promises?
-        // if the flip function returned a promise when it was complete?
-        setTimeout(() => {
-          this.$emit('refresh')
-        }, this.timing)
+      requestNewCard() {
+        if(this.flipped){
+          this.flip().then(() => {
+            this.$emit('request-new-card')
+          })
+        } else {
+          this.$emit('request-new-card')
+        }
       }
     }
   }
