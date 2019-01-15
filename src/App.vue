@@ -1,8 +1,8 @@
 <template>
   <div id="app">
-    <!-- <flash-card :prompt="prompt" :response="response" @refresh="refresh"></flash-card> -->
-    <flash-card-renderless>
-      <div slot-scope="{flip, flipped}">
+    <flash-card :prompt="prompt" :response="response" @request-new-card="updateCard"></flash-card>
+    <!-- <flash-card-renderless @request-new-card="updateCard">
+      <div slot-scope="{flip, flipped, requestNewCard}">
         <div class="flip-container" :class="{flipped: flipped}" @click="flip">
           <div class="flipper" ref="flashcard" id="flashcard">
             <div class="front">
@@ -15,9 +15,10 @@
             </div>
           </div>
         </div>
+        <button class="button refresh" @click="requestNewCard">Next</button>
       </div>
-    </flash-card-renderless>
-    <button class="button refresh" @click.stop.prevent="refresh">Next</button>
+    </flash-card-renderless> -->
+    
     <new-card-form
       :class="{'open': addCardOpen}"
       @addSuccess="addCardOpen = false"
@@ -28,8 +29,8 @@
 </template>
 
 <script>
-// import FlashCard from "./components/FlashCard.vue";
-import FlashCardRenderless from "./components/FlashCardRenderless.vue";
+import FlashCard from "./components/FlashCard.vue";
+// import FlashCardRenderless from "./components/FlashCardRenderless.vue";
 import NewCardForm from "./components/NewCardForm.vue";
 
 function getRandomInt(min, max) {
@@ -39,16 +40,16 @@ function getRandomInt(min, max) {
 export default {
   name: "app",
   components: {
-    // FlashCard,
-    FlashCardRenderless,
+    FlashCard,
+    // FlashCardRenderless,
     NewCardForm
   },
   data: function() {
     return {
       outOfCardsPrompt: "What do you need now?",
       outOfCardsResponse: "More trivia!",
-      prompt: "What type of pet is an Abyssinian?",
-      response: "A cat.",
+      prompt: "",
+      response: "",
       cards: [],
       categories: [],
       addCardOpen: false
@@ -63,7 +64,7 @@ export default {
     }
   },
   methods: {
-    refresh: function() {
+    updateCard: function() {
       if (this.numCards === 0) {
         this.prompt = this.outOfCardsPrompt;
         this.response = this.outOfCardsResponse;
@@ -85,7 +86,7 @@ export default {
       )
       .then(response => {
         this.cards = response.data.values;
-        this.refresh();
+        this.updateCard();
       });
     this.$axios
       .get(
